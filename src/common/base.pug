@@ -12,6 +12,9 @@ html(lang='en')
         meta(name="keywords", content="华科飞扬,播谷网,VR,点播,直播,互动,多屏融合,多屏多终端播放,视频门户网站模版,资源管理网站模版,直播门户网站模版")
         meta(http-equiv='Cache-Control', content='no-siteapp')
         meta(http-equiv='Cache-Control', content='no-transform ')
+        block head
+            link(rel="stylesheet" href=pre_name + "/font/iconfont-0.0.1/iconfont.css")
+            link(rel="stylesheet" href=pre_name + "/assets/element-plus-1.0.2-beta.40/lib/theme-chalk/index.css")
     body
         block content
             div#app
@@ -22,3 +25,4 @@ html(lang='en')
             each item in cdn_js
                 script(src=item)
             script(src=pre_name+"/assets/vue-router-4.0.6/dist/vue-router.global.prod.js")
+            script(src=pre_name+"/assets/element-plus-1.0.2-beta.40/lib/index.full.js")

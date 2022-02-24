@@ -32,8 +32,10 @@ module.exports = {
         //【2】设置扩展，主要是为了cdn 的引入
         config.externals({
             'vue'         : 'Vue',
-            'vue-router'  : 'VueRouter'
+            'vue-router'  : 'VueRouter',
+            'element-plus': 'ElementPlus',
         });
+
 
         //【3】设置pug的使用
         config.module.rules.delete('pug');
