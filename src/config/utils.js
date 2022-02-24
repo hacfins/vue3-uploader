@@ -1,64 +1,104 @@
-import dtime from 'time-formater'
-import useClipboard from 'vue-clipboard3'
-const { toClipboard } = useClipboard();
 
-export const copy = async (str,fn) => {
-    try {
-        await toClipboard(str)
+export const fileMd5 = function(file,fn){
 
-        fn && fn()
-
-    } catch (e) {
-        console.error(e)
-    }
-}
-
-
-export const randomBgColor = function (user_name) {
-    var result = 0
-    for(var i = 0; i < user_name.length; i++){
-        result+=user_name.charCodeAt(i)
-    }
-
-    var default_color_arr = ['#36D9D9','#3DBAF9','#FFA351','#3A80F7'];
-    var randomIndex = result % default_color_arr.length;
-    return default_color_arr[randomIndex]
-}
-
-
-export const timeCustomFormat = function (time,format_str,isnottoday) {
-    if (typeof time != "string") {
+    //判断是否支持File对象
+    if (typeof File == "undefined") {
         return;
     }
-    var newstr   = time.replace(/-/g, '/');
-    var curY = new Date().getFullYear();
-    var today_date = dtime(new Date()).format('YYYY-MM-DD')
-    var tomorrow_date = dtime(new Date().getTime() + 86400000).format('YYYY-MM-DD');
 
-    var start_date = dtime(newstr).format('YYYY-MM-DD')
+    var blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice,
+        chunkSize = 1024 * 1024,
+        chunks    = 0,
+        currentChunk  = 0,
+        blob          = (file instanceof Blob) ? file : file.file,
+        spark         = new SparkMD5(),
+        fileReader    = new FileReader();
 
-
-    var paramsY = new Date(newstr).getFullYear();
-    var formatStr = 'YYYY-MM-DD HH:mm'
-    if(format_str){
-        formatStr = format_str
-    }
-    if(isnottoday){
-        if(curY == paramsY){
-            formatStr = formatStr.replace('YYYY-','')
+    //异步函数
+    fileReader.onload  = function (e) {
+        // append array buffer
+        if (e && e.target.result)
+            spark.appendBinary(e.target.result);
+        else if (fileReader.content)//extend FileReader >=IE10 依赖FileReader.prototype.readAsBinaryString
+            spark.appendBinary(fileReader.content);
+        else {
+            //Error
         }
-    }else{
-        if(start_date == today_date){
-            formatStr = formatStr.replace('YYYY-MM-DD','今天 ')
-        }else if(start_date == tomorrow_date){
-            formatStr = formatStr.replace('YYYY-MM-DD','明天 ')
-        }else if(curY == paramsY){
-            formatStr = formatStr.replace('YYYY-','')
+
+        currentChunk++;
+        if (currentChunk < chunks) {
+            loadNext();
+        }
+        else {
+            loadEnd();
+        }
+    };
+    fileReader.onerror = function () {
+
+    };
+
+    if (file.size > 2 * chunkSize) {//>2M的文件
+        chunks = 3;
+    }
+    else {
+        chunks = 1;
+    }
+
+    function loadNext() {
+        if (3 == chunks) {
+            var fstart = 0,
+                fend   = chunkSize,
+                lstart = file.size - chunkSize,
+                lend   = file.size;
+
+            if (0 == currentChunk)
+                fileReader.readAsBinaryString(blobSlice.call(blob, fstart, fend),fn);
+            else if (1 == currentChunk)
+                fileReader.readAsBinaryString(blobSlice.call(blob, lstart, lend));
+            else if (2 == currentChunk) {
+                //此时直接追加文件大小的文本 结束md5的计算
+                spark.appendBinary(file.size.toString());
+                loadEnd();
+            }
+        } else {
+            fileReader.readAsBinaryString(blobSlice.call(blob, 0, file.size));
         }
     }
 
-    return  dtime(newstr).format(formatStr)
+    function loadEnd() {
+        var fileMd5 = spark.end();
+        if (typeof fn != 'undefined') {
+            fn(fileMd5);
+        }
+    }
+
+    loadNext();
 
 }
 
+//------------------------------------------------- Extend ------------------------------------------------------------//
+//extend FileReader support >= IE10
+if (typeof FileReader != "undefined" && !FileReader.prototype.readAsBinaryString) {
+    FileReader.prototype.readAsBinaryString = function (fileData,fn) {
+        var binary = "";
+        var pt     = this;
 
+        var reader    = new FileReader();
+        reader.onload = function (e) {
+            var bytes  = new Uint8Array(e.target.result);
+            var length = bytes.byteLength;
+            for (var i = 0; i < length; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+
+            //pt.result  - readonly so assign binary
+            pt.content = binary;
+            pt.onload()
+        };
+        try {
+            reader.readAsArrayBuffer(fileData);
+        } catch (e) {
+            fn(false)
+        }
+    }
+}

@@ -168,7 +168,7 @@ module.exports = {
         clientLogLevel    : 'warning',
         historyApiFallback: {
             //hacfin 路由配置
-            index   : '/html/poster.html',
+            index   : '/html/uploader.html',
             rewrites: [
 
             ]
