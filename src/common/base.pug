@@ -1,0 +1,24 @@
+doctype html
+html(lang='en')
+    head
+        -
+            var pre_name = `${htmlWebpackPlugin.options.is_pro}` == 'true' ? '/web' : '';
+        title #{htmlWebpackPlugin.options.title}
+        meta(charset='utf-8')
+        meta(http-equiv='X-UA-Compatible', content='IE=edge')
+        meta(name='renderer', content='webkit')
+        meta(name='force-rendering', content='webkit')
+        meta(name="description", content="无论是课件视频、音频，还是教案ppt、word、pdf或精美图片，华科飞扬校际资源管理平台都能高效管理、检索、在线浏览、下载资源。华科飞扬校际资源平台-播谷网，可以无缝对接华科飞扬一体化录播系统、录课宝等，结合华科飞扬点播、转码与直播服务平台的多屏多终端、码率自适应播放技术，支持多屏多终端播放。我们可以足不出户，每堂课程尽在掌握之中。")
+        meta(name="keywords", content="华科飞扬,播谷网,VR,点播,直播,互动,多屏融合,多屏多终端播放,视频门户网站模版,资源管理网站模版,直播门户网站模版")
+        meta(http-equiv='Cache-Control', content='no-siteapp')
+        meta(http-equiv='Cache-Control', content='no-transform ')
+    body
+        block content
+            div#app
+
+        block scripts
+            -
+                var cdn_js = `${htmlWebpackPlugin.options.cdn.js}`.split(',')
+            each item in cdn_js
+                script(src=item)
+            script(src=pre_name+"/assets/vue-router-4.0.6/dist/vue-router.global.prod.js")
