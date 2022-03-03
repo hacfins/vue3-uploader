@@ -11,6 +11,7 @@
 /**
  * Created by hacfin005 on 2018/11/22.
  */
+var web_admin = $_cloud_config.$clouds_parse('admin');
 
 var baseUrl = web_admin.api_url;
 

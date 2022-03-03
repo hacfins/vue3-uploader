@@ -133,7 +133,7 @@ module.exports = {
                 [{
                     from  : path.resolve(__dirname, './public'),
                     to    : './',
-                    ignore: ['.*', 'images/*.*', 'lib/**/*.*','cloud-config.js']
+                    ignore: ['.*', 'images/*.*']
                 },{
                     from: path.resolve(__dirname, './.htaccess'),
                     to  : '../'

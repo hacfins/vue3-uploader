@@ -1,4 +1,48 @@
+/**
+ *
+ * @param name
+ * @param value
+ * @param min
+ */
+export const setCookie = function (name, value, min) {
+    if (min) {
+        var date = new Date();
+        date.setTime(date.getTime() + (min * 60 * 1000));
+        var expires = "; expires=" + date.toGMTString();
+    }
+    else {
+        expires = "";
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
 
+}
+/**
+ *
+ * @param name
+ */
+export const getCookie = function (name) {
+    var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+    if (arr = document.cookie.match(reg)) {
+        return unescape(arr[2]);
+    } else {
+        return "";
+    }
+
+}
+
+/**
+ *
+ * @param name
+ */
+export const removeCookie = function (name) {
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 16000);
+    var cval = getCookie(name);
+    if (cval != null) {
+        document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString() + ";path=/";
+    }
+
+}
 export const fileMd5 = function(file,fn){
 
     //判断是否支持File对象
@@ -73,6 +117,74 @@ export const fileMd5 = function(file,fn){
     }
 
     loadNext();
+
+}
+
+export const getuuid = function(){
+    var UUID = 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+    });
+    return UUID;
+}
+export const fileSize = function(fileSize,isnotdit) {
+    if (typeof(fileSize) == "undefined") {
+        return "-"
+    }
+    if (!_isNumeric(fileSize)) {
+        return "-"
+    }
+    // var kb = 1024;
+    // var mb = kb * 1024;
+    // var gb = mb * 1024;
+    // var tb = gb * 1024;
+    // if (fileSize >= tb) {
+    //     return parseFloat((fileSize / tb).toFixed(2)) + "T"
+    // } else if (fileSize >= gb) {
+    //     return parseFloat((fileSize / gb).toFixed(2)) + "G"
+    // } else if (fileSize >= mb) {
+    //     return parseFloat((fileSize / mb).toFixed(2)) + "M"
+    // } else if (fileSize >= kb) {
+    //     return parseFloat((fileSize / kb).toFixed(2)) + "KB"
+    // } else {
+    //     return fileSize + "B"
+    // }
+
+
+    var kb = 1024;
+    var mb = kb * 1024;
+    var gb = mb * 1024;
+    var tb = gb * 1024;
+    if (fileSize >= tb) {
+        return  fixed2((fileSize / tb).toString())+ "T"
+    } else if (fileSize >= gb) {
+        return fixed2((fileSize / gb).toString()) + "G"
+    } else if (fileSize >= mb) {
+        return fixed2((fileSize / mb).toString()) + "M"
+    } else if (fileSize >= kb) {
+        return fixed2((fileSize / kb).toString()) + "KB"
+    } else {
+        return fileSize + "B"
+    }
+    function fixed2(str){
+        var result;
+        var dianIndex = str.indexOf('.');
+        if(dianIndex != -1){
+            var zs = str.substr(0,dianIndex)
+            var xs = str.substring(dianIndex,dianIndex+3)
+            if(isnotdit){
+                result = Math.ceil(zs + xs);
+            }else{
+                result = zs + xs;
+            }
+
+
+        }else{
+            result = str;
+        }
+
+        return result;
+    }
 
 }
 

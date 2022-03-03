@@ -10,7 +10,7 @@ var $_cloud_config = {
             name       : "用户中心",
             keywords   : "",
             description: "用户登录注册找回密码的平台，用于其它系统的登陆",
-            api_url    : "http://192.168.123.22:8213",
+            api_url    : "http://192.168.123.110:8511",
             ui_url     : "http://192.168.123.90:8217",
             logo       : "",
             display    : 1
@@ -21,7 +21,7 @@ var $_cloud_config = {
             name       : "学院",
             keywords   : "",
             description: "公开课为各行业培训场景而生。满足教育线上培训、企业内训、客户产品培训等各行业多场景应用,让培训学习更有价值",
-            api_url    : "http://192.168.123.22:8253",
+            api_url    : "http://192.168.123.110:8521",
             ui_url     : "http://192.168.123.90:8257",
             logo       : "",
             display    : 1
