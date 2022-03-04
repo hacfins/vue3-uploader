@@ -3,7 +3,7 @@
 
 ## Demo效果
 ###
-![Image text](https://github.com/hacfins/vue3-uploader/raw/master/src/assets/demo.gif)
+![Image text](https://github.com/hacfins/vue3-uploader/raw/master/src/assets/demo1.gif)
 
 ## uploader.vue
 
