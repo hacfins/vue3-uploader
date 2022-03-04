@@ -1,6 +1,6 @@
 <template>
 
-    <div style="margin:0 auto;width: 400px">
+    <div class="uploader-wrap">
         <uploader
             ref="uploader"
             :options="options"
@@ -498,13 +498,21 @@
 
 <style lang="scss" rel="stylesheet/scss">
 
+    .uploader-wrap{
+        width: 880px;
+        padding: 15px;
+        margin: 40px auto 0;
+        font-size: 12px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+    }
+
     .dialog-web-uploader {
         position   : fixed;
         bottom     : 0;
         width      : 633px;
         top        : auto;
-        left       : auto;
-        right      : 10px;
+        left       : 50%;
+        transform: translate(-50%,0%);
         visibility : visible;
         z-index    : 1000;
         box-shadow : 0 0 10px #ccc;
